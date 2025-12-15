@@ -21,7 +21,7 @@ func main() {
 	http.HandleFunc("/api", handleAPI)
 
 	fmt.Println("Server starting on http://localhost:8080")
-	fmt.Println("Open http://localhost:8080/page1.html to start")
+	fmt.Println("Open http://localhost:8080/index.html to start")
 
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
