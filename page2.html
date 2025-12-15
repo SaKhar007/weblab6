@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Page 2 - Viewer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="block header">
+    <div class="input-box"><img src = 'testlogo.jpg'></div>
+    <strong>Лабораторна робота №6</strong>
+    <span>一</span>
+</div>
+<div class="block b2" style="justify-content: start; text-align: left; font-size: 14px;">
+    <h4>Меню</h4>
+    <ul style="padding-left: 20px; margin: 0;">
+        <li><a href="page1.html" target="_blank">First Page (Editor Mode)</a></li>
+    </ul>
+    <br>
+    <p style="font-size: 12px; color: #555;">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor.
+    </p>
+</div>
+<div class="block b3" style="font-size: 13px; text-align: justify;">
+    <h4>Новини</h4>
+    <p>
+        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    </p>
+    <p>
+        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+    </p>
+</div>
+<div class="block b4">
+    <i>"Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia."</i>
+</div>
+
+<div class="block b5">
+    <h3>Перегляд Акордеону</h3>
+    <p style="font-size: 10px; color: grey;">Оновлення кожні 5 сек...</p>
+    <div id="accordion-container">
+    </div>
+</div>
+
+<div class="block b6" style="font-size: 13px;">
+    <h4>Реклама</h4>
+    <p>
+        <a href="https://www.twitch.tv/sakhar_sato" target="_blank">Had to put it here</a>
+    </p>
+    <div style="background: #f3e6f5; width: 100%; height: 0px;"><img src="Lycoris.jpg"></div>
+</div>
+<div class="block footer">
+    <span>Copyright ©　2025</span>
+    <div class="input-box">砂糖はここにありました :)</div>
+</div>
+<script>
+    const container = document.getElementById('accordion-container');
+    let currentDataHash = "";
+
+    async function loadData() {
+        try {
+            const response = await fetch('/api?t=' + Date.now());
+            const data = await response.json();
+
+            const newDataHash = JSON.stringify(data);
+            if (newDataHash !== currentDataHash) {
+                currentDataHash = newDataHash;
+                renderAccordion(data);
+            }
+        } catch (error) {
+            console.error('Error loading data:', error);
+        }
+    }
+
+    function renderAccordion(data) {
+        container.innerHTML = ''; // Очистка
+
+        if (!Array.isArray(data) || data.length === 0) {
+            container.innerHTML = '<p>Немає даних для відображення</p>';
+            return;
+        }
+
+        data.forEach(item => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'accordion-item';
+
+            const btn = document.createElement('button');
+            btn.className = 'accordion-header';
+            btn.innerText = item.title;
+
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'accordion-content';
+            const p = document.createElement('p');
+            p.innerText = item.content;
+            contentDiv.appendChild(p);
+
+            btn.addEventListener('click', function() {
+                this.classList.toggle('active');
+                const panel = this.nextElementSibling;
+                if (panel.style.maxHeight) {
+                    panel.style.maxHeight = null;
+                } else {
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                }
+            });
+
+            wrapper.appendChild(btn);
+            wrapper.appendChild(contentDiv);
+            container.appendChild(wrapper);
+        });
+    }
+
+    loadData();
+    setInterval(loadData, 5000);
+</script>
+</body>
+</html>

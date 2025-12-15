@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><!DOCTYPE html>
+        <html lang="uk">
+        <head>
+        <meta charset="UTF-8">
+        <title>Page 1 - Editor</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="block header">
+    <div class="input-box"><img src = 'testlogo.jpg'></div>
+    <strong>Лабораторна робота №6</strong>
+    <span>一</span>
+</div>
+<div class="block b2" style="justify-content: start; text-align: left; font-size: 14px;">
+    <h4>Меню</h4>
+    <ul style="padding-left: 20px; margin: 0;">
+        <li><a href="page2.html" target="_blank">Second Page (Viewer Mode)</a></li>
+    </ul>
+    <br>
+    <p style="font-size: 12px; color: #555;">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor.
+    </p>
+</div>
+<div class="block b3" style="font-size: 13px; text-align: justify;">
+    <h4>Новини</h4>
+    <p>
+        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    </p>
+    <p>
+        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+    </p>
+</div>
+<div class="block b4">
+    <i>"Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia."</i>
+</div>
+
+<div class="block b5" id="work-area">
+    <h3>Створення Акордеону</h3>
+    <div id="inputs-container"></div>
+    <button onclick="addInputBlock()">+ Додати елемент</button>
+    <hr>
+    <button onclick="saveData()" style="background-color: lightgreen;">ЗБЕРЕГТИ НА СЕРВЕР</button>
+    <p id="status"></p>
+</div>
+
+<div class="block b6" style="font-size: 13px;">
+    <h4>Реклама</h4>
+    <p>
+        <a href="https://www.twitch.tv/sakhar_sato" target="_blank">Had to put it here</a>
+    </p>
+    <div style="background: #ccc; width: 100%; height: 0px;"><img src = 'Lycoris.jpg'></div>
+</div>
+<div class="block footer">
+    <span>Copyright ©　2025</span>
+    <div class="input-box">私のサイト</div>
+</div>
+
+<script>
+
+    const container = document.getElementById('inputs-container');
+
+    function addInputBlock() {
+        const div = document.createElement('div');
+        div.className = 'input-group';
+        div.innerHTML = `
+                <label>Заголовок:</label>
+                <input type="text" class="acc-title" placeholder="Назва вкладки">
+                <label>Контент:</label>
+                <textarea class="acc-content" placeholder="Вміст вкладки"></textarea>
+                <button onclick="this.parentElement.remove()" style="color:red; font-size:10px;">Видалити</button>
+            `;
+        container.appendChild(div);
+    }
+
+  
+    async function saveData() {
+        const titles = document.querySelectorAll('.acc-title');
+        const contents = document.querySelectorAll('.acc-content');
+        const data = [];
+
+        titles.forEach((title, index) => {
+            if(title.value.trim() !== "") {
+                data.push({
+                    title: title.value,
+                    content: contents[index].value
+                });
+            }
+        });
+
+        try {
+            const response = await fetch('/api', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await response.json();
+            document.getElementById('status').innerText = "Збережено: " + new Date().toLocaleTimeString();
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('status').innerText = "Помилка збереження!";
+        }
+    }
+
+
+    addInputBlock();
+</script>
+</body>
+</html></title>
+</head>
+<body>
+
+</body>
+</html>
